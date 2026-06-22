@@ -216,3 +216,50 @@ revealEls.forEach(el => {
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
   revealObserver.observe(el);
 });
+
+
+
+// ── CONTACT FORM SUBMISSION ──
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+const submitBtn = document.getElementById('submitBtn');
+
+contactForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const country_code = document.getElementById('country_code').value;
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+  formStatus.textContent = '';
+  formStatus.style.color = '';
+
+  try {
+    const response = await fetch('http://127.0.0.1:5001/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, country_code, phone, email, message })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      formStatus.textContent = '✅ ' + data.message;
+      formStatus.style.color = '#22c55e';
+      contactForm.reset();
+    } else {
+      formStatus.textContent = '❌ ' + data.message;
+      formStatus.style.color = '#ff5050';
+    }
+  } catch (err) {
+    formStatus.textContent = '❌ Something went wrong. Please try again.';
+    formStatus.style.color = '#ff5050';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Inquiry';
+  }
+});

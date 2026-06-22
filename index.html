@@ -621,15 +621,33 @@
         <p>For demos, installations, partnerships, or bulk orders, contact Horizon Link Technologies directly.</p>
       </div>
       <div class="contact-form-wrap" style="margin: 0 auto;">
-        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="redirect" value="https://yourdomain.com/thanks.html" />
+        <form class="contact-form" id="contactForm">
           <div class="form-group">
             <label for="name">Full Name</label>
             <input id="name" name="name" type="text" placeholder="Enter your name" required />
           </div>
           <div class="form-group">
             <label for="phone">Contact Number</label>
-            <input id="phone" name="phone" type="tel" placeholder="Enter your contact number" required />
+            <div class="phone-row">
+              <select id="country_code" name="country_code">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+60">🇲🇾 +60</option>
+                <option value="+966">🇸🇦 +966</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+55">🇧🇷 +55</option>
+                <option value="+27">🇿🇦 +27</option>
+                <option value="+234">🇳🇬 +234</option>
+              </select>
+              <input id="phone" name="phone" type="tel" placeholder="Enter your contact number" required />
+            </div>
           </div>
           <div class="form-group">
             <label for="email">Email Address</label>
@@ -639,7 +657,7 @@
             <label for="message">Requirement / Project</label>
             <textarea id="message" name="message" rows="4" placeholder="Tell us about your home, hostel, office, or project..." required></textarea>
           </div>
-          <button type="submit" class="btn primary-btn">Submit Inquiry</button>
+          <button type="submit" class="btn primary-btn" id="submitBtn">Submit Inquiry</button>
           <p class="form-status" id="formStatus"></p>
         </form>
       </div>
