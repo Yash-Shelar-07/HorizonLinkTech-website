@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Horizon Link Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: #111;
+            border-bottom: 1px solid #1e1e1e;
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .nav-brand span { color: #00c2ff; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-right a {
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-right a:hover { color: #fff; }
+
+        .btn-export {
+            padding: 7px 16px;
+            background: #00c2ff;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-export:hover { background: #00a8dd; }
+
+        /* MAIN */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .page-header p {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: #141414;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 6px;
+        }
+
+        .stat-card.new .value { color: #00c2ff; }
+        .stat-card.contacted .value { color: #f0a500; }
+        .stat-card.inprogress .value { color: #a855f7; }
+        .stat-card.closed .value { color: #22c55e; }
+
+        /* FILTERS */
+        .filters {
+            background: #141414;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filters input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 14px;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .filters input[type="text"]:focus { border-color: #00c2ff; }
+
+        .filters select {
+            padding: 10px 14px;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filters button {
+            padding: 10px 20px;
+            background: #00c2ff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .filters .btn-clear {
+            background: #1e1e1e;
+            color: #aaa;
+            border: 1px solid #2a2a2a;
+        }
+
+        /* TABLE */
+        .table-wrap {
+            background: #141414;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #111;
+            border-bottom: 1px solid #1e1e1e;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #ccc;
+            border-bottom: 1px solid #1a1a1a;
+            vertical-align: middle;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        tr:hover td { background: #161616; }
+
+        .td-name { color: #fff; font-weight: 500; }
+
+        .td-msg {
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #888;
+        }
+
+        /* STATUS BADGE */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new { background: rgba(0,194,255,0.1); color: #00c2ff; }
+        .badge-contacted { background: rgba(240,165,0,0.1); color: #f0a500; }
+        .badge-inprogress { background: rgba(168,85,247,0.1); color: #a855f7; }
+        .badge-closed { background: rgba(34,197,94,0.1); color: #22c55e; }
+
+        .btn-view {
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #aaa;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-view:hover {
+            border-color: #00c2ff;
+            color: #00c2ff;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #444;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand">HORIZON LINK <span>TECHNOLOGIES</span></div>
+    <div class="nav-right">
+        <a href="{{ url_for('admin.export_csv') }}" class="btn-export">Export CSV</a>
+        <a href="{{ url_for('admin.logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-header">
+        <h1>Submissions Dashboard</h1>
+        <p>Manage and track all incoming requirements</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-card">
+            <div class="label">Total</div>
+            <div class="value">{{ submissions|length }}</div>
+        </div>
+        <div class="stat-card new">
+            <div class="label">New</div>
+            <div class="value">{{ submissions|selectattr('status','eq','New')|list|length }}</div>
+        </div>
+        <div class="stat-card contacted">
+            <div class="label">Contacted</div>
+            <div class="value">{{ submissions|selectattr('status','eq','Contacted')|list|length }}</div>
+        </div>
+        <div class="stat-card inprogress">
+            <div class="label">In Progress</div>
+            <div class="value">{{ submissions|selectattr('status','eq','In Progress')|list|length }}</div>
+        </div>
+        <div class="stat-card closed">
+            <div class="label">Closed</div>
+            <div class="value">{{ submissions|selectattr('status','eq','Closed')|list|length }}</div>
+        </div>
+    </div>
+
+    <!-- FILTERS -->
+    <form class="filters" method="GET">
+        <input type="text" name="search" placeholder="Search by name, email or phone..." value="{{ search }}">
+        <select name="status">
+            <option value="">All Statuses</option>
+            {% for s in statuses %}
+            <option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('admin.dashboard') }}" class="filters btn-clear" style="padding:10px 20px; border-radius:8px; font-size:13px; text-decoration:none;">Clear</a>
+    </form>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+        {% if submissions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in submissions %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td class="td-name">{{ s.name }}</td>
+                    <td>{{ s.country_code }} {{ s.phone }}</td>
+                    <td>{{ s.email }}</td>
+                    <td class="td-msg">{{ s.message }}</td>
+                    <td>
+                        {% set badge_class = {
+                            'New': 'badge-new',
+                            'Contacted': 'badge-contacted',
+                            'In Progress': 'badge-inprogress',
+                            'Closed': 'badge-closed'
+                        } %}
+                        <span class="badge {{ badge_class.get(s.status, 'badge-new') }}">{{ s.status }}</span>
+                    </td>
+                    <td>{{ s.created_at.strftime('%d %b %Y') }}</td>
+                    <td><a href="{{ url_for('admin.detail', submission_id=s.id) }}" class="btn-view">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty">No submissions found.</div>
+        {% endif %}
+    </div>
+</main>
+
+</body>
+</html>

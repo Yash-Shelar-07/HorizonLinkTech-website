@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission #{{ submission.id }} | Horizon Link Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: #111;
+            border-bottom: 1px solid #1e1e1e;
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand { font-size: 16px; font-weight: 700; letter-spacing: 1px; color: #fff; }
+        .nav-brand span { color: #00c2ff; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-right a { font-size: 13px; color: #888; text-decoration: none; transition: color 0.2s; }
+        .nav-right a:hover { color: #fff; }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: #00c2ff; }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header h1 { font-size: 22px; font-weight: 700; }
+        .page-header p { font-size: 13px; color: #666; margin-top: 4px; }
+
+        /* BADGE */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new { background: rgba(0,194,255,0.1); color: #00c2ff; }
+        .badge-contacted { background: rgba(240,165,0,0.1); color: #f0a500; }
+        .badge-inprogress { background: rgba(168,85,247,0.1); color: #a855f7; }
+        .badge-closed { background: rgba(34,197,94,0.1); color: #22c55e; }
+
+        .card {
+            background: #141414;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #00c2ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item .info-label {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .info-item .info-value {
+            font-size: 14px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .message-box {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* STATUS UPDATE */
+        .status-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-form select {
+            padding: 10px 14px;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background: #00c2ff; color: #000; }
+        .btn-primary:hover { background: #00a8dd; }
+
+        .btn-danger {
+            background: rgba(255,80,80,0.1);
+            color: #ff5050;
+            border: 1px solid rgba(255,80,80,0.2);
+        }
+
+        .btn-danger:hover { background: rgba(255,80,80,0.2); }
+
+        /* NOTES */
+        .notes-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+        .note-item {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-left: 3px solid #00c2ff;
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .note-item .note-meta {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .note-item .note-content {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .note-form textarea {
+            width: 100%;
+            padding: 14px;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            outline: none;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .note-form textarea:focus { border-color: #00c2ff; }
+
+        .no-notes {
+            font-size: 13px;
+            color: #444;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .delete-section {
+            border-top: 1px solid #1e1e1e;
+            padding-top: 20px;
+            margin-top: 8px;
+        }
+
+        .delete-section p {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand">HORIZON LINK <span>TECHNOLOGIES</span></div>
+    <div class="nav-right">
+        <a href="{{ url_for('admin.dashboard') }}">← Dashboard</a>
+        <a href="{{ url_for('admin.logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main>
+    <a href="{{ url_for('admin.dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    <div class="page-header">
+        <div>
+            <h1>Submission #{{ submission.id }}</h1>
+            <p>Received on {{ submission.created_at.strftime('%d %B %Y at %I:%M %p') }}</p>
+        </div>
+        {% set badge_class = {
+            'New': 'badge-new',
+            'Contacted': 'badge-contacted',
+            'In Progress': 'badge-inprogress',
+            'Closed': 'badge-closed'
+        } %}
+        <span class="badge {{ badge_class.get(submission.status, 'badge-new') }}">{{ submission.status }}</span>
+    </div>
+
+    <!-- CONTACT INFO -->
+    <div class="card">
+        <div class="card-title">Contact Information</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Full Name</div>
+                <div class="info-value">{{ submission.name }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Phone</div>
+                <div class="info-value">{{ submission.country_code }} {{ submission.phone }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{ submission.email }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MESSAGE -->
+    <div class="card">
+        <div class="card-title">Requirement / Message</div>
+        <div class="message-box">{{ submission.message }}</div>
+    </div>
+
+    <!-- STATUS UPDATE -->
+    <div class="card">
+        <div class="card-title">Update Status</div>
+        <form class="status-form" method="POST" action="{{ url_for('admin.update_status', submission_id=submission.id) }}">
+            <select name="status">
+                {% for s in statuses %}
+                <option value="{{ s }}" {% if submission.status == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+
+    <!-- NOTES -->
+    <div class="card">
+        <div class="card-title">Team Notes</div>
+
+        {% if submission.notes %}
+        <div class="notes-list">
+            {% for note in submission.notes|sort(attribute='created_at', reverse=True) %}
+            <div class="note-item">
+                <div class="note-meta">{{ note.created_at.strftime('%d %b %Y at %I:%M %p') }}</div>
+                <div class="note-content">{{ note.content }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-notes">No notes yet. Add one below after contacting this person.</div>
+        {% endif %}
+
+        <form class="note-form" method="POST" action="{{ url_for('admin.add_note', submission_id=submission.id) }}">
+            <textarea name="content" placeholder="Add a note — what did they say? What do they need? Next steps..."></textarea>
+            <button type="submit" class="btn btn-primary">Add Note</button>
+        </form>
+    </div>
+
+    <!-- DELETE -->
+    <div class="card">
+        <div class="card-title">Danger Zone</div>
+        <div class="delete-section">
+            <p>Permanently delete this submission and all its notes. This cannot be undone.</p>
+            <form method="POST" action="{{ url_for('admin.delete_submission', submission_id=submission.id) }}"
+                  onsubmit="return confirm('Are you sure you want to delete this submission? This cannot be undone.')">
+                <button type="submit" class="btn btn-danger">Delete Submission</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
