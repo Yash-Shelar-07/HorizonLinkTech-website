@@ -932,3 +932,28 @@ textarea { resize: vertical; }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
   .two-column { grid-template-columns: 1fr; }
 }
+
+
+
+
+
+.phone-row {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-row select {
+  padding: 12px 10px;
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  min-width: 110px;
+}
+
+.phone-row input {
+  flex: 1;
+}
