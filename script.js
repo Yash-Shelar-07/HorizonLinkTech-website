@@ -263,3 +263,4 @@ contactForm?.addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Submit Inquiry';
   }
 });
+
