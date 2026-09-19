@@ -111,3 +111,4 @@ def export_csv():
     output.seek(0)
     return Response(output, mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment;filename=submissions.csv'})
+
