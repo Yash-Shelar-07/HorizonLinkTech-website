@@ -239,7 +239,7 @@ contactForm?.addEventListener('submit', async (e) => {
   formStatus.style.color = '';
 
   try {
-      const response = await fetch('https://YOUR-RENDER-URL.onrender.com/api/contact', {
+      const response = await fetch('https://horizonlinktech-website.onrender.com/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, country_code, phone, email, message })
