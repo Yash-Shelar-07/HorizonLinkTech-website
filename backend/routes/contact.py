@@ -37,3 +37,4 @@ def submit_contact():
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': 'Something went wrong. Please try again.'}), 500
+
